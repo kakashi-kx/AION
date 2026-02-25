@@ -1,2 +1,571 @@
-# Content: 
-"""Core AI modules for AION framework"""
+# AION - AI Offensive Network
+# Main Configuration File
+# Developed by kakashi-kx ⚡
+
+# ============================================================================
+# SYSTEM SETTINGS
+# ============================================================================
+
+system:
+  name: "AION"
+  version: "2.0.0"
+  environment: "production"  # development, testing, production
+  debug: false
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  log_file: "logs/aion.log"
+  temp_dir: "/tmp/aion"
+  max_memory: "4GB"
+  concurrent_tasks: 10
+
+# ============================================================================
+# AI SETTINGS
+# ============================================================================
+
+ai:
+  # Default model settings
+  default_model: "llama3"
+  default_embedding: "nomic-embed-text"
+  use_local: true  # Use local Ollama models
+  fallback_to_cloud: false  # Fallback to cloud APIs if local fails
+  
+  # Model parameters
+  temperature: 0.7
+  max_tokens: 2000
+  top_p: 0.9
+  frequency_penalty: 0
+  presence_penalty: 0
+  num_ctx: 4096  # Context window size
+  
+  # Generation settings
+  stream: false
+  repeat_penalty: 1.1
+  stop_sequences:
+    - "</s>"
+    - "User:"
+    - "Assistant:"
+  
+  # Retry settings
+  max_retries: 3
+  retry_delay: 1  # seconds
+  timeout: 30  # seconds
+
+# ============================================================================
+# AGENT SETTINGS
+# ============================================================================
+
+agents:
+  # Reconnaissance Agent
+  recon:
+    enabled: true
+    depth: "normal"  # light, normal, deep, insane
+    threads: 50
+    timeout: 3
+    rate_limit: 100  # packets per second
+    randomize_scan: true
+    decoy_scan: false
+    fragment_packets: false
+    source_port: 0  # 0 = random
+    
+    # Scan types
+    scan_types:
+      - "tcp_connect"
+      - "syn_scan"
+      - "udp_scan"
+      - "os_fingerprint"
+      - "service_detection"
+    
+    # Port ranges
+    port_ranges:
+      light: [21,22,23,25,53,80,110,111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080]
+      normal: "1-1024"
+      deep: "1-65535"
+      insane: "1-65535"
+  
+  # Exploitation Agent
+  exploitation:
+    enabled: true
+    aggression: "medium"  # low, medium, high, insane
+    safe_mode: true  # Avoid destructive actions
+    auto_exploit: false
+    max_exploits_per_service: 3
+    
+    # Payload settings
+    payload_encoding: "base64"
+    custom_payloads_dir: "payloads/custom"
+    
+    # Evasion techniques
+    evasion:
+      random_agent: true
+      delay_between_requests: 1
+      jitter: 0.5
+      rotate_ips: false
+    
+    # Exploit databases
+    exploit_dbs:
+      - "exploitdb"
+      - "cve"
+      - "custom"
+  
+  # Post-Exploitation Agent
+  post_exploitation:
+    enabled: true
+    persistence: false
+    cleanup: true
+    loot_dir: "loot"
+    
+    # Actions
+    actions:
+      - "privilege_escalation"
+      - "credential_dumping"
+      - "lateral_movement"
+      - "data_exfiltration"
+  
+  # Reporting Agent
+  reporting:
+    enabled: true
+    format: "detailed"  # summary, detailed, executive
+    include_mitre: true
+    include_remediation: true
+    include_evidence: true
+    
+    # Output formats
+    output_formats:
+      - "pdf"
+      - "html"
+      - "json"
+      - "markdown"
+    
+    # Templates
+    templates_dir: "templates/reports"
+    
+    # MITRE ATT&CK
+    mitre_version: "v14"
+    mitre_data_dir: "data/mitre"
+
+# ============================================================================
+# MODULES SETTINGS
+# ============================================================================
+
+modules:
+  # Traditional pentesting modules
+  traditional:
+    port_scanner:
+      enabled: true
+      syn_scan: true
+      connect_scan: true
+      udp_scan: false
+    
+    web_scanner:
+      enabled: true
+      threads: 10
+      user_agent: "AION-Scanner/2.0"
+      follow_redirects: true
+      cookies: {}
+      headers: {}
+    
+    network_sniffer:
+      enabled: false
+      interface: "eth0"
+      promiscuous: false
+      filter: ""
+    
+    brute_forcer:
+      enabled: true
+      wordlist: "wordlists/rockyou.txt"
+      min_password_length: 8
+      max_attempts_per_second: 5
+  
+  # AI red teaming modules
+  ai_redteaming:
+    llm_jailbreak:
+      enabled: true
+      payloads_file: "payloads/ai_payloads/jailbreak_prompts.txt"
+      test_apis: true
+      test_chatbots: true
+    
+    prompt_injection:
+      enabled: true
+      techniques:
+        - "direct"
+        - "indirect"
+        - "context_overflow"
+        - "role_play"
+    
+    model_extraction:
+      enabled: false
+      max_queries: 1000
+      extraction_technique: "api_based"
+    
+    rag_poisoning:
+      enabled: false
+      test_data: "data/poisoning_samples"
+
+# ============================================================================
+# VECTOR STORE SETTINGS
+# ============================================================================
+
+vector_store:
+  enabled: true
+  type: "chromadb"  # chromadb, faiss, pinecone
+  path: "data/vector_store"
+  collection_name: "aion_knowledge"
+  
+  # Chunking
+  chunk_size: 1000
+  chunk_overlap: 200
+  
+  # Embeddings
+  embedding_model: "nomic-embed-text"
+  embedding_dimension: 768
+  
+  # Retrieval
+  similarity_top_k: 5
+  score_threshold: 0.7
+  
+  # Persistence
+  persist_directory: true
+  auto_save: true
+  save_interval: 300  # seconds
+
+# ============================================================================
+# SCANNING SETTINGS
+# ============================================================================
+
+scanning:
+  # Default ports
+  default_ports:
+    tcp: [21,22,23,25,53,80,110,111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080,8443]
+    udp: [53,67,68,69,123,161,162,500,514,520,1900]
+  
+  # Performance
+  max_threads: 100
+  timeout: 3
+  delay: 0.1
+  
+  # Evasion
+  decoy_ips: []
+  source_port: 0
+  fragment: false
+  randomize_hosts: true
+  
+  # Detection
+  service_detection: true
+  os_detection: true
+  version_detection: true
+  
+  # Output
+  output_format: "json"
+  save_results: true
+  results_dir: "scan_results"
+
+# ============================================================================
+# NETWORK SETTINGS
+# ============================================================================
+
+network:
+  # Proxy settings
+  proxy:
+    http: ""
+    https: ""
+    socks5: ""
+    authentication: null
+  
+  # Timeouts
+  connect_timeout: 5
+  read_timeout: 10
+  write_timeout: 10
+  
+  # DNS
+  dns_servers:
+    - "8.8.8.8"
+    - "1.1.1.1"
+    - "9.9.9.9"
+  
+  # User Agents
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    - "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+    - "AION-Scanner/2.0"
+    - "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15"
+
+# ============================================================================
+# REPORTING SETTINGS
+# ============================================================================
+
+reporting:
+  # Output directory
+  output_dir: "reports"
+  
+  # PDF settings
+  pdf:
+    company_name: "AION Security"
+    author: "kakashi-kx"
+    confidential: true
+    watermark: ""
+  
+  # HTML settings
+  html:
+    theme: "cyberpunk"  # cyberpunk, light, dark
+    interactive: true
+    charts: true
+  
+  # Executive summary
+  executive_summary:
+    include_metrics: true
+    include_risk_scores: true
+    business_impact: true
+  
+  # Technical details
+  technical:
+    include_commands: true
+    include_evidence: true
+    include_poc: false
+
+# ============================================================================
+# SECURITY SETTINGS
+# ============================================================================
+
+security:
+  # Encryption
+  encrypt_reports: false
+  encryption_key: ""  # Set in secrets.yaml
+  
+  # Authentication
+  require_auth: false
+  auth_token: ""  # Set in secrets.yaml
+  
+  # Rate limiting
+  rate_limit:
+    enabled: true
+    max_requests_per_minute: 60
+    burst: 10
+  
+  # IP rotation
+  rotate_ips: false
+  proxy_list: []
+  
+  # Safe mode
+  safe_mode: true
+  destructive_actions: false
+  confirm_destructive: true
+
+# ============================================================================
+# LOGGING SETTINGS
+# ============================================================================
+
+logging:
+  version: 1
+  disable_existing_loggers: false
+  
+  formatters:
+    standard:
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      datefmt: "%Y-%m-%d %H:%M:%S"
+    
+    detailed:
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d - %(message)s"
+      datefmt: "%Y-%m-%d %H:%M:%S"
+    
+    json:
+      format: "%(asctime)s %(name)s %(levelname)s %(module)s %(lineno)d %(message)s"
+      class: "pythonjsonlogger.jsonlogger.JsonFormatter"
+  
+  handlers:
+    console:
+      class: "logging.StreamHandler"
+      level: "INFO"
+      formatter: "standard"
+      stream: "ext://sys.stdout"
+    
+    file:
+      class: "logging.handlers.RotatingFileHandler"
+      level: "DEBUG"
+      formatter: "detailed"
+      filename: "logs/aion.log"
+      maxBytes: 10485760  # 10MB
+      backupCount: 5
+    
+    error_file:
+      class: "logging.handlers.RotatingFileHandler"
+      level: "ERROR"
+      formatter: "detailed"
+      filename: "logs/error.log"
+      maxBytes: 10485760
+      backupCount: 5
+  
+  loggers:
+    aion:
+      level: "INFO"
+      handlers: ["console", "file"]
+      propagate: false
+    
+    aion.ai:
+      level: "INFO"
+      handlers: ["console", "file"]
+      propagate: false
+    
+    aion.modules:
+      level: "INFO"
+      handlers: ["file"]
+      propagate: false
+
+# ============================================================================
+# PATHS
+# ============================================================================
+
+paths:
+  # Data directories
+  data_dir: "data"
+  wordlists_dir: "data/wordlists"
+  temp_dir: "/tmp/aion"
+  
+  # Payload directories
+  payloads_dir: "payloads"
+  ai_payloads_dir: "payloads/ai_payloads"
+  custom_payloads_dir: "payloads/custom"
+  
+  # Output directories
+  output_dir: "output"
+  reports_dir: "reports"
+  loot_dir: "loot"
+  
+  # Config directories
+  config_dir: "config"
+  templates_dir: "templates"
+
+# ============================================================================
+# INTEGRATIONS
+# ============================================================================
+
+integrations:
+  # Slack
+  slack:
+    enabled: false
+    webhook_url: ""  # Set in secrets.yaml
+    channel: "#alerts"
+  
+  # Discord
+  discord:
+    enabled: false
+    webhook_url: ""  # Set in secrets.yaml
+  
+  # Email
+  email:
+    enabled: false
+    smtp_server: ""
+    smtp_port: 587
+    username: ""  # Set in secrets.yaml
+    password: ""  # Set in secrets.yaml
+    from_addr: ""
+    to_addrs: []
+  
+  # Jira
+  jira:
+    enabled: false
+    url: ""
+    project: ""
+    username: ""  # Set in secrets.yaml
+    api_token: ""  # Set in secrets.yaml
+
+# ============================================================================
+# WEB INTERFACE
+# ============================================================================
+
+web:
+  enabled: false
+  host: "127.0.0.1"
+  port: 8080
+  ssl: false
+  ssl_cert: ""
+  ssl_key: ""
+  
+  # Authentication
+  username: "admin"
+  password_hash: ""  # Set in secrets.yaml
+  
+  # Session
+  session_timeout: 3600
+  secret_key: ""  # Set in secrets.yaml
+
+# ============================================================================
+# PERFORMANCE
+# ============================================================================
+
+performance:
+  # Thread pool
+  max_workers: 10
+  thread_pool_size: 50
+  
+  # Process pool
+  use_process_pool: false
+  max_processes: 4
+  
+  # Queue
+  queue_size: 1000
+  
+  # Caching
+  cache_results: true
+  cache_ttl: 3600
+  cache_dir: "data/cache"
+  
+  # Database
+  use_database: false
+  database_url: "sqlite:///data/aion.db"
+
+# ============================================================================
+# FEATURE FLAGS
+# ============================================================================
+
+features:
+  # Experimental features
+  experimental:
+    agentic_attacks: false
+    rag_poisoning: false
+    model_extraction: false
+  
+  # Beta features
+  beta:
+    exploit_chaining: true
+    ai_reporting: true
+  
+  # Legacy features
+  legacy:
+    old_scanner: false
+
+# ============================================================================
+# DISCLAIMER
+# ============================================================================
+
+disclaimer: |
+  ╔═══════════════════════════════════════════════════════════════════════╗
+  ║                                                                       ║
+  ║   ⚠️  AION - AI Offensive Network                                    ║
+  ║   LEGAL DISCLAIMER                                                    ║
+  ║                                                                       ║
+  ║   This tool is for authorized security testing and educational       ║
+  ║   purposes ONLY. Users are solely responsible for compliance with    ║
+  ║   all applicable laws. Unauthorized access to computer systems is    ║
+  ║   illegal.                                                            ║
+  ║                                                                       ║
+  ║   By using this software, you agree to:                              ║
+  ║   - Only test systems you own or have written permission to test     ║
+  ║   - Comply with all local, state, federal, and international laws    ║
+  ║   - Accept full responsibility for your actions                      ║
+  ║   - Not use this tool for any illegal or unauthorized purpose        ║
+  ║                                                                       ║
+  ╚═══════════════════════════════════════════════════════════════════════╝
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata:
+  project: "AION"
+  version: "2.0.0"
+  author: "kakashi-kx"
+  created: "2026-02-26"
+  last_modified: "2026-02-26"
+  license: "MIT"
+  repository: "https://github.com/kakashi-kx/AION"
+  documentation: "https://github.com/kakashi-kx/AION/wiki"

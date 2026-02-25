@@ -1,0 +1,33 @@
+# Core dependencies
+requests==2.31.0
+beautifulsoup4==4.12.2
+python-nmap==0.7.1
+scapy==2.5.0
+paramiko==3.3.1
+cryptography==41.0.7
+
+# AI/ML dependencies
+ollama==0.1.6
+langchain==0.1.0
+chromadb==0.4.22
+sentence-transformers==2.2.2
+transformers==4.36.2
+torch==2.1.2
+
+# Reporting
+jinja2==3.1.2
+reportlab==4.0.9
+markdown==3.5.1
+weasyprint==60.2
+
+# Utilities
+pyyaml==6.0.1
+colorama==0.4.6
+tqdm==4.66.1
+python-whois==0.8.0
+dnspython==2.4.2
+argcomplete==3.1.6
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0

@@ -1,2 +1,374 @@
-# Content: 
-"""Core AI modules for AION framework"""
+# AION - AI Offensive Network
+# AI Models Configuration
+# Developed by kakashi-kx ⚡
+
+# ============================================================================
+# LOCAL MODELS (Ollama)
+# ============================================================================
+# These models run completely offline on your local machine
+# Install with: ollama pull <model-name>
+
+local_models:
+  # Meta's Llama 3 - Best general purpose
+  llama3:
+    name: "llama3"
+    description: "Meta's Llama 3 8B - Best general purpose model"
+    size: "8B"
+    context_length: 8192
+    temperature: 0.7
+    top_p: 0.9
+    capabilities:
+      - general_reasoning
+      - code_generation
+      - security_analysis
+      - exploit_generation
+    performance: "excellent"
+    ram_required: "8GB"
+    download_command: "ollama pull llama3"
+
+  # Mistral - Fast and efficient
+  mistral:
+    name: "mistral"
+    description: "Mistral 7B - Fast and efficient, great for real-time ops"
+    size: "7B"
+    context_length: 8192
+    temperature: 0.7
+    top_p: 0.9
+    capabilities:
+      - fast_inference
+      - penetration_testing
+      - vulnerability_analysis
+    performance: "very good"
+    ram_required: "6GB"
+    download_command: "ollama pull mistral"
+
+  # Microsoft Phi-3 - Lightweight
+  phi3:
+    name: "phi3"
+    description: "Microsoft Phi-3 Mini - Lightweight, perfect for embedded systems"
+    size: "3.8B"
+    context_length: 4096
+    temperature: 0.5
+    top_p: 0.85
+    capabilities:
+      - lightweight
+      - quick_scanning
+      - basic_analysis
+    performance: "good"
+    ram_required: "4GB"
+    download_command: "ollama pull phi3"
+
+  # Neural Chat - Optimized for conversations
+  neural-chat:
+    name: "neural-chat"
+    description: "Intel's Neural Chat 7B - Optimized for interactive sessions"
+    size: "7B"
+    context_length: 8192
+    temperature: 0.8
+    top_p: 0.95
+    capabilities:
+      - conversational
+      - social_engineering
+      - phishing_creation
+    performance: "good"
+    ram_required: "6GB"
+    download_command: "ollama pull neural-chat"
+
+  # CodeLlama - Specialized for code
+  codellama:
+    name: "codellama"
+    description: "Meta's CodeLlama - Specialized for code analysis and generation"
+    size: "7B"
+    context_length: 16384
+    temperature: 0.6
+    top_p: 0.9
+    capabilities:
+      - code_analysis
+      - exploit_development
+      - reverse_engineering
+    performance: "excellent"
+    ram_required: "8GB"
+    download_command: "ollama pull codellama"
+
+  # Dolphin - Uncensored model
+  dolphin-mistral:
+    name: "dolphin-mistral"
+    description: "Dolphin Mistral - Uncensored, for red team operations"
+    size: "7B"
+    context_length: 8192
+    temperature: 0.8
+    top_p: 0.95
+    capabilities:
+      - uncensored
+      - red_team
+      - advanced_techniques
+    performance: "very good"
+    ram_required: "7GB"
+    download_command: "ollama pull dolphin-mistral"
+    warning: "This model has no content filters - use responsibly"
+
+  # Mixtral - High performance
+  mixtral:
+    name: "mixtral"
+    description: "Mixtral 8x7B - Highest performance, needs more RAM"
+    size: "47B"
+    context_length: 32768
+    temperature: 0.7
+    top_p: 0.9
+    capabilities:
+      - high_performance
+      - complex_reasoning
+      - advanced_planning
+    performance: "exceptional"
+    ram_required: "32GB"
+    download_command: "ollama pull mixtral"
+
+# ============================================================================
+# CLOUD APIS (Optional - requires internet)
+# ============================================================================
+# These models require API keys and internet connection
+# Add your API keys to config/secrets.yaml (never commit this!)
+
+cloud_apis:
+  # OpenAI GPT-4
+  openai-gpt4:
+    name: "gpt-4"
+    provider: "OpenAI"
+    description: "GPT-4 Turbo - Most capable, requires API key"
+    max_tokens: 128000
+    temperature: 0.7
+    top_p: 0.9
+    capabilities:
+      - state_of_art
+      - all_tasks
+      - best_quality
+    cost_per_1k_tokens: "$0.01"
+    api_key_required: true
+    endpoint: "https://api.openai.com/v1/chat/completions"
+    
+  # OpenAI GPT-3.5
+  openai-gpt35:
+    name: "gpt-3.5-turbo"
+    provider: "OpenAI"
+    description: "GPT-3.5 Turbo - Fast and cost-effective"
+    max_tokens: 16385
+    temperature: 0.7
+    top_p: 0.9
+    capabilities:
+      - fast
+      - cost_effective
+      - good_quality
+    cost_per_1k_tokens: "$0.001"
+    api_key_required: true
+    endpoint: "https://api.openai.com/v1/chat/completions"
+
+  # Anthropic Claude
+  claude-3:
+    name: "claude-3-opus"
+    provider: "Anthropic"
+    description: "Claude 3 Opus - Excellent for security analysis"
+    max_tokens: 200000
+    temperature: 0.7
+    top_p: 0.9
+    capabilities:
+      - long_context
+      - security_focused
+      - detailed_analysis
+    cost_per_1k_tokens: "$0.015"
+    api_key_required: true
+    endpoint: "https://api.anthropic.com/v1/messages"
+
+  # Google Gemini
+  gemini-pro:
+    name: "gemini-pro"
+    provider: "Google"
+    description: "Gemini Pro - Good all-around performance"
+    max_tokens: 30720
+    temperature: 0.7
+    top_p: 0.9
+    capabilities:
+      - multimodal
+      - good_performance
+      - free_tier
+    cost_per_1k_tokens: "$0.0005"
+    api_key_required: true
+    endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+
+# ============================================================================
+# EMBEDDING MODELS (For RAG)
+# ============================================================================
+
+embedding_models:
+  # Local embeddings
+  local:
+    nomic-embed-text:
+      name: "nomic-embed-text"
+      provider: "Ollama"
+      description: "Nomic Embed Text - Local embeddings"
+      dimension: 768
+      download_command: "ollama pull nomic-embed-text"
+    
+    mxbai-embed-large:
+      name: "mxbai-embed-large"
+      provider: "Ollama"
+      description: "MixedBread AI Large Embeddings"
+      dimension: 1024
+      download_command: "ollama pull mxbai-embed-large"
+  
+  # Cloud embeddings
+  cloud:
+    text-embedding-3-small:
+      name: "text-embedding-3-small"
+      provider: "OpenAI"
+      dimension: 1536
+      cost_per_1k_tokens: "$0.00002"
+      
+    text-embedding-3-large:
+      name: "text-embedding-3-large"
+      provider: "OpenAI"
+      dimension: 3072
+      cost_per_1k_tokens: "$0.00013"
+
+# ============================================================================
+# DEFAULTS
+# ============================================================================
+
+defaults:
+  # Default models
+  local: "llama3"              # Default local model
+  cloud: "openai-gpt35"        # Default cloud model
+  embedding: "nomic-embed-text" # Default embedding model
+  
+  # Default settings
+  temperature: 0.7
+  max_retries: 3
+  timeout: 30
+  stream: false
+  
+  # Model selection strategy
+  selection_strategy: "auto"    # auto, fastest, most_capable, cheapest
+  
+  # Fallback order
+  fallback_order:
+    - "llama3"
+    - "mistral"
+    - "phi3"
+    - "openai-gpt35"
+
+# ============================================================================
+# MODEL GROUPS
+# ============================================================================
+
+groups:
+  # Group by capability
+  redteam:
+    - "llama3"
+    - "dolphin-mistral"
+    - "claude-3"
+    - "mixtral"
+    
+  recon:
+    - "mistral"
+    - "phi3"
+    - "gemini-pro"
+    
+  exploitation:
+    - "codellama"
+    - "llama3"
+    - "gpt-4"
+    
+  reporting:
+    - "claude-3"
+    - "gpt-4"
+    - "llama3"
+    
+  # Group by speed
+  fastest:
+    - "phi3"
+    - "mistral"
+    - "openai-gpt35"
+    
+  most_capable:
+    - "mixtral"
+    - "gpt-4"
+    - "claude-3"
+    
+  cheapest:
+    - "phi3"
+    - "gemini-pro"
+    - "openai-gpt35"
+
+# ============================================================================
+# MODEL METRICS
+# ============================================================================
+
+metrics:
+  # Performance scores (1-10)
+  llama3:
+    speed: 7
+    accuracy: 9
+    security_knowledge: 9
+    code_quality: 8
+    
+  mistral:
+    speed: 9
+    accuracy: 8
+    security_knowledge: 7
+    code_quality: 7
+    
+  phi3:
+    speed: 10
+    accuracy: 7
+    security_knowledge: 6
+    code_quality: 6
+    
+  mixtral:
+    speed: 6
+    accuracy: 10
+    security_knowledge: 9
+    code_quality: 9
+    
+  gpt-4:
+    speed: 5
+    accuracy: 10
+    security_knowledge: 10
+    code_quality: 10
+
+# ============================================================================
+# PROMPT TEMPLATES
+# ============================================================================
+
+templates:
+  recon:
+    system: "You are an expert reconnaissance AI for penetration testing. Analyze the following target information and provide detailed insights about potential attack vectors."
+    user: "Target: {target}\nOpen ports: {ports}\nServices: {services}\nProvide reconnaissance recommendations."
+    
+  exploitation:
+    system: "You are an exploitation expert. Given the vulnerabilities found, suggest the most effective exploit chains."
+    user: "Vulnerabilities: {vulns}\nTarget OS: {os}\nSuggest exploit sequence."
+    
+  jailbreak_detection:
+    system: "You are an AI security expert. Analyze if the following response indicates a successful jailbreak attempt."
+    user: "Payload: {payload}\nResponse: {response}\nIs this jailbroken? Explain why."
+    
+  reporting:
+    system: "You are a security report writer. Generate professional penetration testing reports with MITRE ATT&CK mapping."
+    user: "Findings: {findings}\nGenerate executive summary and technical details."
+
+# ============================================================================
+# WARNINGS & DISCLAIMERS
+# ============================================================================
+
+disclaimers:
+  general: "⚠️ These models are tools for authorized security testing only. Always obtain proper authorization."
+  uncensored: "⚠️ Uncensored models may generate harmful content. Use responsibly and only in controlled environments."
+  cloud: "⚠️ Cloud models send data to external servers. Do not use with sensitive information."
+
+# ============================================================================
+# VERSION INFO
+# ============================================================================
+
+version: "2.0.0"
+last_updated: "2026-02-26"
+author: "kakashi-kx"
+documentation: "https://github.com/kakashi-kx/AION/wiki/Models"

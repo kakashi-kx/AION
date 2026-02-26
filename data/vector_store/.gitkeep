@@ -1,2 +1,4 @@
-#content
-"""ggh"""
+# AION Vector Store Directory
+# This directory will contain the ChromaDB vector database files
+# The .gitkeep file ensures the directory exists in git
+# Database files are ignored via .gitignore

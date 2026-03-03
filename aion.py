@@ -66,61 +66,61 @@ BR = Style.BRIGHT
 RS = Style.RESET_ALL
 
 # ============================================================================
-# BANNER - PERFECTLY ALIGNED WITH AION
+# BANNER - PERFECTLY ALIGNED BORDERS
 # ============================================================================
 
 BANNER = f"""
-{BR}{R}╔══════════════════════════════════════════════════════════════════════════════╗
-{R}║                                                                                  ║
-{R}║  {W}█████╗ ██╗ ██████╗ ███╗   ██╗         {R}████████╗ ██████╗  ██████╗ ██╗      ║
+{R}╔══════════════════════════════════════════════════════════════════════════════╗
+{R}║                                                                              ║
+{R}║  {W}█████╗ ██╗ ██████╗ ███╗   ██╗         {R}████████╗ ██████╗  ██████╗ ██╗     ║
 {R}║  {W}██╔══██╗██║██╔═══██╗████╗  ██║         {R}╚══██╔══╝██╔═══██╗██╔═══██╗██║     ║
 {R}║  {W}██████╔╝██║██║   ██║██╔██╗ ██║         {R}   ██║   ██║   ██║██║   ██║██║     ║
 {R}║  {W}██╔══██╗██║██║   ██║██║╚██╗██║         {R}   ██║   ██║   ██║██║   ██║██║     ║
 {R}║  {W}██████╔╝██║╚██████╔╝██║ ╚████║         {R}   ██║   ╚██████╔╝╚██████╔╝███████╗║
 {R}║  {W}╚═════╝ ╚═╝ ╚═════╝ ╚═╝  ╚═══╝         {R}   ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝║
 {R}║                                                                              ║
-{R}║  {Y}BUG HUNTER & PENETRATION TESTER TOOLKIT{R}                               ║
-{R}║  {C}Version {VERSION} | {M}Developed by {Y}{BR}kakashi-kx{R}                 ║
+{R}║  {Y}BUG HUNTER & PENETRATION TESTER TOOLKIT{R}                                      ║
+{R}║  {C}Version {VERSION} | {M}Developed by {Y}{BR}kakashi-kx{R}                                    ║
 {R}║                                                                              ║
 {R}╠══════════════════════════════════════════════════════════════════════════════╣
 {R}║                                                                              ║
 {R}║  {W}[ RECONNAISSANCE ]                    [ WEB APPLICATION ]                ║
-{R}║  {G}01.{W} Subdomain Finder                {G}11.{W} SQL Injection Scanner   ║
-{R}║  {G}02.{W} DNS Enumeration                 {G}12.{W} XSS Scanner             ║
-{R}║  {G}03.{W} Port Scanner                    {G}13.{W} LFI/RFI Scanner         ║
-{R}║  {G}04.{W} Technology Detector             {G}14.{W} SSRF Scanner            ║
-{R}║  {G}05.{W} Wayback Machine URLs            {G}15.{W} Open Redirect Scanner   ║
-{R}║  {G}06.{W} GitHub Dorking                  {G}16.{W} CORS Scanner            ║
+{R}║  {G}01.{W} Subdomain Finder                {G}11.{W} SQL Injection Scanner       ║
+{R}║  {G}02.{W} DNS Enumeration                 {G}12.{W} XSS Scanner                ║
+{R}║  {G}03.{W} Port Scanner                    {G}13.{W} LFI/RFI Scanner            ║
+{R}║  {G}04.{W} Technology Detector             {G}14.{W} SSRF Scanner               ║
+{R}║  {G}05.{W} Wayback Machine URLs            {G}15.{W} Open Redirect Scanner      ║
+{R}║  {G}06.{W} GitHub Dorking                  {G}16.{W} CORS Scanner               ║
 {R}║                                                                              ║
 {R}║  {W}[ NETWORK ATTACKS ]                    [ AUTHENTICATION ]                ║
-{R}║  {G}07.{W} Service Detection               {G}17.{W} JWT Token Tester        ║
-{R}║  {G}08.{W} Banner Grabbing                 {G}18.{W} OAuth Scanner           ║
-{R}║  {G}09.{W} SSL/TLS Scanner                 {G}19.{W} Session Fixation        ║
-{R}║  {G}10.{W} Packet Sniffer                  {G}20.{W} Rate Limit Tester       ║
+{R}║  {G}07.{W} Service Detection               {G}17.{W} JWT Token Tester           ║
+{R}║  {G}08.{W} Banner Grabbing                 {G}18.{W} OAuth Scanner              ║
+{R}║  {G}09.{W} SSL/TLS Scanner                 {G}19.{W} Session Fixation           ║
+{R}║  {G}10.{W} Packet Sniffer                  {G}20.{W} Rate Limit Tester          ║
 {R}║                                                                              ║
 {R}║  {W}[ EXPLOITATION ]                      [ UTILITIES ]                      ║
-{R}║  {G}21.{W} Reverse Shell Generator         {G}31.{W} Hash Cracker            ║
-{R}║  {G}22.{W} Metasploit Wrapper              {G}32.{W} Password Generator      ║
-{R}║  {G}23.{W} CVE Scanner                     {G}33.{W} Encoder/Decoder         ║
-{R}║  {G}24.{W} Default Creds Tester            {G}34.{W} IP Tools                ║
-{R}║  {G}25.{W} Brute Forcer                    {G}35.{W} Domain Tools            ║
+{R}║  {G}21.{W} Reverse Shell Generator         {G}31.{W} Hash Cracker               ║
+{R}║  {G}22.{W} Metasploit Wrapper              {G}32.{W} Password Generator         ║
+{R}║  {G}23.{W} CVE Scanner                     {G}33.{W} Encoder/Decoder            ║
+{R}║  {G}24.{W} Default Creds Tester            {G}34.{W} IP Tools                   ║
+{R}║  {G}25.{W} Brute Forcer                    {G}35.{W} Domain Tools               ║
 {R}║                                                                              ║
 {R}║  {W}[ OSINT ]                             [ REPORTING ]                      ║
-{R}║  {G}26.{W} Email OSINT                     {G}36.{W} PDF Report Generator    ║
-{R}║  {G}27.{W} Phone OSINT                     {G}37.{W} HTML Dashboard          ║
-{R}║  {G}28.{W} Username OSINT                  {G}38.{W} JSON Export             ║
-{R}║  {G}29.{W} Social Media Finder             {G}39.{W} MITRE ATT&CK Mapping    ║
-{R}║  {G}30.{W} Dark Web Scanner                {G}40.{W} Executive Summary       ║
+{R}║  {G}26.{W} Email OSINT                     {G}36.{W} PDF Report Generator       ║
+{R}║  {G}27.{W} Phone OSINT                     {G}37.{W} HTML Dashboard             ║
+{R}║  {G}28.{W} Username OSINT                  {G}38.{W} JSON Export                ║
+{R}║  {G}29.{W} Social Media Finder             {G}39.{W} MITRE ATT&CK Mapping       ║
+{R}║  {G}30.{W} Dark Web Scanner                {G}40.{W} Executive Summary          ║
 {R}║                                                                              ║
 {R}╠══════════════════════════════════════════════════════════════════════════════╣
 {R}║                                                                              ║
-{R}║  {Y}⚡ QUICK COMMANDS:{R}                                                    ║
-{R}║  {W}• python aion.py --target example.com --recon{R}                         ║
-{R}║  {W}• python aion.py --target example.com --web-scan{R}                      ║
-{R}║  {W}• python aion.py --target example.com --full-audit{R}                    ║
-{R}║  {W}• python aion.py --target example.com --osint{R}                         ║
-{R}║  {W}• python aion.py --list-modules{R}                                       ║
-{R}║  {W}• python aion.py --interactive{R}                                        ║
+{R}║  {Y}⚡ QUICK COMMANDS:{R}                                                              ║
+{R}║  {W}• python aion.py --target example.com --recon{R}                                   ║
+{R}║  {W}• python aion.py --target example.com --web-scan{R}                                 ║
+{R}║  {W}• python aion.py --target example.com --full-audit{R}                               ║
+{R}║  {W}• python aion.py --target example.com --osint{R}                                     ║
+{R}║  {W}• python aion.py --list-modules{R}                                                   ║
+{R}║  {W}• python aion.py --interactive{R}                                                     ║
 {R}║                                                                              ║
 {R}╚══════════════════════════════════════════════════════════════════════════════╝{RS}
 """
@@ -1047,7 +1047,7 @@ def list_all_modules():
 
 def interactive_mode():
     """Interactive shell mode"""
-    print_banner()
+    # IMPORTANT: No print_banner() here - banner already printed in main()
     print_info("Entering interactive mode. Type 'help' for commands, 'exit' to quit.\n")
     
     while True:
@@ -1087,12 +1087,12 @@ def interactive_mode():
                     
                     # Port scan
                     scanner = PortScanner(ip, ports="1-1000")
-                    ports = scanner.scan()
+                    scanner.scan()
                     
                     # Technology detection
                     if type == 'domain':
                         tech = TechnologyDetector(target)
-                        tech_stack = tech.detect()
+                        tech.detect()
                         
                     print_success("Reconnaissance completed")
                 else:
@@ -1104,15 +1104,15 @@ def interactive_mode():
                 
                 # SQLi scan
                 sqli = SQLInjectionScanner(target)
-                sqli_results = sqli.scan()
+                sqli.scan()
                 
                 # XSS scan
                 xss = XSSScanner(target)
-                xss_results = xss.scan()
+                xss.scan()
                 
                 # LFI scan
                 lfi = LFIRFIScanner(target)
-                lfi_results = lfi.scan()
+                lfi.scan()
                 
                 print_success("Web vulnerability scan completed")
             
@@ -1122,10 +1122,10 @@ def interactive_mode():
                 
                 if '@' in target:
                     email = EmailOSINT(target)
-                    results = email.analyze()
+                    email.analyze()
                 else:
                     username = UsernameOSINT(target)
-                    results = username.search()
+                    username.search()
                 
                 print_success("OSINT completed")
             
@@ -1161,7 +1161,8 @@ def interactive_mode():
             
             elif cmd == 'clear':
                 os.system('cls' if os.name == 'nt' else 'clear')
-                print_banner()
+                print_banner()  # Only reprint banner on clear command
+                print_info("Entering interactive mode. Type 'help' for commands, 'exit' to quit.\n")
             
             else:
                 print_error(f"Unknown command: {cmd}")
@@ -1409,7 +1410,6 @@ def main():
     if args.web_scan or args.full_audit or args.sqli or args.xss or args.lfi or args.open_redirect:
         print_info("Running web vulnerability scan...")
         
-        web_ports = [80,443,8080,8443]
         base_url = f"http://{args.target}" if type == 'domain' else f"http://{ip}"
         
         if args.sqli or args.full_audit:
@@ -1433,9 +1433,7 @@ def main():
         print_info("Running OSINT...")
         
         if type == 'domain':
-            # Email OSINT
-            email_results = {}
-            results['osint'] = email_results
+            results['osint'] = {}
     
     # Generate report
     if args.output or results:
@@ -1462,4 +1460,3 @@ if __name__ == "__main__":
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         sys.exit(1)
-

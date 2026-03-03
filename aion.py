@@ -58,6 +58,13 @@ BR = Style.BRIGHT
 RS = Style.RESET_ALL
 
 # ============================================================================
+# VERSION INFORMATION - ADD THESE 3 LINES HERE
+# ============================================================================
+VERSION = "3.5.0"
+AUTHOR = "kakashi-kx"
+GITHUB = "https://github.com/kakashi-kx/AION"
+
+# ============================================================================
 # BANNER
 # ============================================================================
 
@@ -1453,3 +1460,4 @@ if __name__ == "__main__":
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         sys.exit(1)
+

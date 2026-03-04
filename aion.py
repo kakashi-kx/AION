@@ -140,16 +140,16 @@ BANNER = f"""
 # ============================================================================
 
 def print_success(msg):
-    print(f"{G}[✓] {msg}{RS}")
+    print(f"{G}[+] {msg}{RS}")
 
 def print_info(msg):
-    print(f"{C}[ℹ] {msg}{RS}")
+    print(f"{C}[*] {msg}{RS}")
 
 def print_warning(msg):
-    print(f"{Y}[⚠] {msg}{RS}")
+    print(f"{Y}[!] {msg}{RS}")
 
 def print_error(msg):
-    print(f"{R}[✗] {msg}{RS}")
+    print(f"{R}[-] {msg}{RS}")
 
 def print_banner():
     """Print banner only once"""
@@ -1470,6 +1470,7 @@ if __name__ == "__main__":
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         sys.exit(1)
+
 
 
 

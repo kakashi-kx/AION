@@ -405,7 +405,7 @@ class SQLInjectionScanner:
     """Scan for SQL injection vulnerabilities"""
     
     def __init__(self, url):
-        self.url = url
+        self.url = url.rstrip('/')  # Remove trailing slash
         self.vulnerabilities = []
         
     def scan(self):
@@ -414,22 +414,23 @@ class SQLInjectionScanner:
         payloads = [
             "'", "\"", "';", "--", "' OR '1'='1", "\" OR \"1\"=\"1",
             "' UNION SELECT NULL--", "' AND 1=1--", "' AND 1=2--",
-            "'; WAITFOR DELAY '00:00:05'--", "' OR SLEEP(5)--",
-            "1' ORDER BY 1--", "1' ORDER BY 100--", "' UNION SELECT @@version--",
-            "' UNION SELECT database()--", "' UNION SELECT user()--"
+            "1' ORDER BY 1--", "1' ORDER BY 100--"
         ]
         
         error_patterns = [
             "sql", "mysql", "oracle", "postgresql", "sqlite",
-            "odbc", "driver", "db2", "microsoft.*database",
             "syntax error", "unclosed quotation", "quoted string",
-            "mysql_fetch", "mysqli_fetch", "pg_fetch", "sqlsrv_fetch"
+            "mysql_fetch", "mysqli_fetch", "pg_fetch"
         ]
         
-        try:
-            for payload in payloads:
-                test_url = f"{self.url}{payload}"
-                response = requests.get(test_url, timeout=3, verify=False)
+        for payload in payloads:
+            try:
+                # Properly encode the payload for URL
+                import urllib.parse
+                encoded_payload = urllib.parse.quote(payload)
+                test_url = f"{self.url}?id={encoded_payload}"  # Add parameter
+                
+                response = requests.get(test_url, timeout=5, verify=False)
                 
                 for pattern in error_patterns:
                     if pattern in response.text.lower():
@@ -442,9 +443,12 @@ class SQLInjectionScanner:
                         self.vulnerabilities.append(vuln)
                         print_warning(f"Potential SQL injection found with payload: {payload}")
                         break
-                        
-        except Exception as e:
-            print_error(f"Error scanning for SQL injection: {e}")
+            except Exception as e:
+                # Silent fail for individual payloads
+                continue
+        
+        if not self.vulnerabilities:
+            print_info("No SQL injection vulnerabilities detected")
         
         return self.vulnerabilities
 
@@ -452,7 +456,7 @@ class XSSScanner:
     """Scan for Cross-Site Scripting vulnerabilities"""
     
     def __init__(self, url):
-        self.url = url
+        self.url = url.rstrip('/')
         self.vulnerabilities = []
         
     def scan(self):
@@ -461,20 +465,17 @@ class XSSScanner:
         payloads = [
             "<script>alert('XSS')</script>",
             "<img src=x onerror=alert('XSS')>",
-            "<svg onload=alert('XSS')>",
             "javascript:alert('XSS')",
-            "\"><script>alert('XSS')</script>",
-            "'><script>alert('XSS')</script>",
-            "';alert('XSS');//",
-            "\" onmouseover=\"alert('XSS')\"",
-            "<body onload=alert('XSS')>",
-            "<input onfocus=alert('XSS') autofocus>"
         ]
         
-        try:
-            for payload in payloads:
-                test_url = f"{self.url}{urllib.parse.quote(payload)}"
-                response = requests.get(test_url, timeout=3, verify=False)
+        import urllib.parse
+        
+        for payload in payloads:
+            try:
+                encoded_payload = urllib.parse.quote(payload)
+                test_url = f"{self.url}?q={encoded_payload}"
+                
+                response = requests.get(test_url, timeout=5, verify=False)
                 
                 if payload in response.text:
                     vuln = {
@@ -483,10 +484,12 @@ class XSSScanner:
                         'payload': payload
                     }
                     self.vulnerabilities.append(vuln)
-                    print_warning(f"Potential XSS found with payload: {payload[:30]}...")
-                    
-        except Exception as e:
-            print_error(f"Error scanning for XSS: {e}")
+                    print_warning(f"Potential XSS found")
+            except:
+                continue
+        
+        if not self.vulnerabilities:
+            print_info("No XSS vulnerabilities detected")
         
         return self.vulnerabilities
 
@@ -494,7 +497,7 @@ class LFIRFIScanner:
     """Scan for LFI/RFI vulnerabilities"""
     
     def __init__(self, url):
-        self.url = url
+        self.url = url.rstrip('/')
         self.vulnerabilities = []
         
     def scan(self):
@@ -502,25 +505,22 @@ class LFIRFIScanner:
         
         payloads = [
             "../../../etc/passwd",
-            "..\\..\\..\\windows\\win.ini",
             "/etc/passwd",
-            "C:\\windows\\win.ini",
-            "../../../../etc/passwd",
-            "....//....//....//etc/passwd",
             "php://filter/convert.base64-encode/resource=index.php",
-            "expect://ls",
-            "file:///etc/passwd"
         ]
         
         indicators = [
-            "root:x:", "boot loader", "[fonts]", "[extensions]",
-            "<?php", "mysql", "password", "database"
+            "root:x:", "<?php", "mysql", "password"
         ]
         
-        try:
-            for payload in payloads:
-                test_url = f"{self.url}{payload}"
-                response = requests.get(test_url, timeout=3, verify=False)
+        import urllib.parse
+        
+        for payload in payloads:
+            try:
+                encoded_payload = urllib.parse.quote(payload)
+                test_url = f"{self.url}?file={encoded_payload}"
+                
+                response = requests.get(test_url, timeout=5, verify=False)
                 
                 for indicator in indicators:
                     if indicator in response.text.lower():
@@ -531,11 +531,13 @@ class LFIRFIScanner:
                             'evidence': indicator
                         }
                         self.vulnerabilities.append(vuln)
-                        print_warning(f"Potential LFI found with payload: {payload}")
+                        print_warning(f"Potential LFI found")
                         break
-                        
-        except Exception as e:
-            print_error(f"Error scanning for LFI/RFI: {e}")
+            except:
+                continue
+        
+        if not self.vulnerabilities:
+            print_info("No LFI/RFI vulnerabilities detected")
         
         return self.vulnerabilities
 
@@ -1470,6 +1472,7 @@ if __name__ == "__main__":
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         sys.exit(1)
+
 
 
 

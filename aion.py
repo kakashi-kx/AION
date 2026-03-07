@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 """
 AION - Advanced Intrusion Offensive Network
@@ -135,7 +136,6 @@ BANNER = f"""
 {R}║                                                                              
 {R}╚══════════════════════════════════════════════════════════════════════════════╝{RS}
 """
-
 # ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
@@ -1381,12 +1381,12 @@ def main():
         return 1
     
     # Resolve target
-    ip, target_type = check_target(args.target)
+    ip, type = check_target(args.target)
     if not ip:
         print_error(f"Could not resolve target: {args.target}")
         return 1
     
-    print_success(f"Target resolved: {args.target} -> {ip} ({target_type})")
+    print_success(f"Target resolved: {args.target} -> {ip} ({type})")
     
     # Initialize results
     results = {}
@@ -1400,7 +1400,7 @@ def main():
         results['port_scan'] = scanner.scan()
         
         # Technology detection for domains
-        if target_type == 'domain':
+        if type == 'domain':
             tech = TechnologyDetector(args.target)
             results['technologies'] = tech.detect()
         
@@ -1419,35 +1419,25 @@ def main():
             wayback = WaybackMachine(args.target)
             results['wayback_urls'] = wayback.fetch()
     
-    # Web vulnerability scan - FIXED INDENTATION
+    # Web vulnerability scan
     if args.web_scan or args.full_audit or args.sqli or args.xss or args.lfi or args.open_redirect:
         print_info("Running web vulnerability scan...")
         
-        # FIX: Handle URLs that already have protocol
-        if args.target.startswith(('http://', 'https://')):
-            base_url = args.target.rstrip('/')
-        else:
-            base_url = f"http://{args.target}" if target_type == 'domain' else f"http://{ip}"
-        
-        print_info(f"Target URL: {base_url}")
+        base_url = f"http://{args.target}" if type == 'domain' else f"http://{ip}"
         
         if args.sqli or args.full_audit:
-            from modules.web.sql_injection import SQLInjectionScanner
             sqli = SQLInjectionScanner(base_url)
             results['sql_injection'] = sqli.scan()
         
         if args.xss or args.full_audit:
-            from modules.web.xss_scanner import XSSScanner
             xss = XSSScanner(base_url)
             results['xss'] = xss.scan()
         
         if args.lfi or args.full_audit:
-            from modules.web.lfi_scanner import LFIRFIScanner
             lfi = LFIRFIScanner(base_url)
             results['lfi'] = lfi.scan()
         
         if args.open_redirect or args.full_audit:
-            from modules.web.open_redirect import OpenRedirectScanner
             redirect = OpenRedirectScanner(base_url)
             results['open_redirect'] = redirect.scan()
     
@@ -1455,7 +1445,7 @@ def main():
     if args.osint or args.full_audit:
         print_info("Running OSINT...")
         
-        if target_type == 'domain':
+        if type == 'domain':
             results['osint'] = {}
     
     # Generate report
@@ -1483,3 +1473,8 @@ if __name__ == "__main__":
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         sys.exit(1)
+
+
+
+
+

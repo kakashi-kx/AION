@@ -135,6 +135,7 @@ BANNER = f"""
 {R}║                                                                              
 {R}╚══════════════════════════════════════════════════════════════════════════════╝{RS}
 """
+
 # ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
@@ -1380,12 +1381,12 @@ def main():
         return 1
     
     # Resolve target
-    ip, type = check_target(args.target)
+    ip, target_type = check_target(args.target)
     if not ip:
         print_error(f"Could not resolve target: {args.target}")
         return 1
     
-    print_success(f"Target resolved: {args.target} -> {ip} ({type})")
+    print_success(f"Target resolved: {args.target} -> {ip} ({target_type})")
     
     # Initialize results
     results = {}
@@ -1399,7 +1400,7 @@ def main():
         results['port_scan'] = scanner.scan()
         
         # Technology detection for domains
-        if type == 'domain':
+        if target_type == 'domain':
             tech = TechnologyDetector(args.target)
             results['technologies'] = tech.detect()
         
@@ -1418,15 +1419,15 @@ def main():
             wayback = WaybackMachine(args.target)
             results['wayback_urls'] = wayback.fetch()
     
-    # Web vulnerability scan
-     if args.web_scan or args.full_audit or args.sqli or args.xss or args.lfi or args.open_redirect:
+    # Web vulnerability scan - FIXED INDENTATION
+    if args.web_scan or args.full_audit or args.sqli or args.xss or args.lfi or args.open_redirect:
         print_info("Running web vulnerability scan...")
         
         # FIX: Handle URLs that already have protocol
         if args.target.startswith(('http://', 'https://')):
             base_url = args.target.rstrip('/')
         else:
-            base_url = f"http://{args.target}" if type == 'domain' else f"http://{ip}"
+            base_url = f"http://{args.target}" if target_type == 'domain' else f"http://{ip}"
         
         print_info(f"Target URL: {base_url}")
         
@@ -1454,7 +1455,7 @@ def main():
     if args.osint or args.full_audit:
         print_info("Running OSINT...")
         
-        if type == 'domain':
+        if target_type == 'domain':
             results['osint'] = {}
     
     # Generate report
@@ -1482,9 +1483,3 @@ if __name__ == "__main__":
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         sys.exit(1)
-
-
-
-
-
-

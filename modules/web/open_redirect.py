@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Open Redirect Scanner - INTELLIGENT VERSION
-Handles connection errors gracefully
+Open Redirect Scanner - COMPLETELY REWRITTEN
+No more URL concatenation bugs!
 """
 
 import requests
@@ -12,82 +12,128 @@ from urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 class OpenRedirectScanner:
-    """Intelligent open redirect scanner"""
+    """Bulletproof open redirect scanner"""
     
     def __init__(self, url):
-        self.raw_url = url
+        # Store the original URL for reference
+        self.original_url = url
         
-        # Normalize URL
+        # PROPER URL PARSING - NO CONCATENATION!
         if not url.startswith(('http://', 'https://')):
             url = 'http://' + url
         
+        # Parse the URL properly
         parsed = urllib.parse.urlparse(url)
-        self.base_url = f"{parsed.scheme}://{parsed.netloc}"
-        self.domain = parsed.netloc.split(':')[0]
+        self.scheme = parsed.scheme
+        self.netloc = parsed.netloc
+        self.base_url = f"{self.scheme}://{self.netloc}"
+        
+        print(f"[*] Open redirect scanner initialized for: {self.base_url}")
         
         self.vulnerabilities = []
         self.session = requests.Session()
         self.session.verify = False
         self.session.allow_redirects = False
-        self.session.timeout = 3  # Shorter timeout
+        self.session.timeout = 5
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (AION Security Scanner)'
+        })
         
     def scan(self):
+        """Scan for open redirect vulnerabilities"""
         print("[*] Scanning for open redirect vulnerabilities...")
         
-        # First, check if site is responsive
-        try:
-            test = self.session.get(self.base_url, timeout=2)
-            print(f"[*] Site is responsive (HTTP {test.status_code})")
-        except Exception as e:
-            print(f"[*] Site may be down or blocking: {e}")
-            print("[*] Skipping open redirect scan")
+        # First, check if the site is reachable
+        if not self._is_site_reachable():
+            print("[*] Site unreachable - skipping open redirect scan")
             return []
         
-        # Common redirect parameters
-        params = ['redirect', 'url', 'next', 'return', 'goto', 'target']
+        # Common redirect parameters to test
+        redirect_params = [
+            'redirect', 'url', 'next', 'return', 'goto', 'target', 
+            'dest', 'destination', 'out', 'view', 'redir', 'continue',
+            'return_to', 'return_url', 'redirect_uri', 'redirect_to'
+        ]
         
-        # Test payloads - use benign domains first
+        # Test payloads - using safe domains
         payloads = [
             'https://example.com',
             'http://example.com',
             '//example.com'
         ]
         
-        found = False
+        found_count = 0
         
-        for param in params:
-            if found:
-                break
-                
+        for param in redirect_params:
             for payload in payloads:
                 try:
-                    encoded = urllib.parse.quote(payload)
-                    test_url = f"{self.base_url}/?{param}={encoded}"
+                    # PROPER URL CONSTRUCTION - NO CONCATENATION!
+                    encoded_payload = urllib.parse.quote(payload, safe='')
                     
-                    # Try to connect
+                    # Build URL properly using urllib
+                    query_params = {param: payload}
+                    url_parts = list(urllib.parse.urlparse(self.base_url))
+                    query = urllib.parse.urlencode(query_params)
+                    url_parts[4] = query  # Set query string
+                    
+                    test_url = urllib.parse.urlunparse(url_parts)
+                    
+                    # Alternative simple construction (also safe)
+                    # test_url = f"{self.base_url}?{param}={encoded_payload}"
+                    
+                    # Make request
                     response = self.session.get(test_url)
                     
                     # Check for redirect
-                    if response.status_code in [301, 302]:
+                    if response.status_code in [301, 302, 303, 307, 308]:
                         location = response.headers.get('Location', '')
-                        if 'example.com' in location:
-                            self.vulnerabilities.append({
+                        
+                        # Check if redirect goes to external site
+                        if any(domain in location.lower() for domain in ['example.com']):
+                            vuln = {
                                 'type': 'Open Redirect',
                                 'url': test_url,
                                 'parameter': param,
-                                'payload': payload
-                            })
-                            print(f"[!] Open redirect found!")
-                            found = True
-                            break
+                                'payload': payload,
+                                'redirects_to': location,
+                                'severity': 'Medium'
+                            }
+                            self.vulnerabilities.append(vuln)
+                            found_count += 1
+                            print(f"[!] Open redirect found! Parameter: {param} -> {location[:60]}...")
                             
-                except requests.exceptions.ConnectionError:
-                    # Site refused connection - this is expected if no vulnerability exists
+                            # Break after finding one to avoid too many requests
+                            if found_count >= 3:
+                                break
+                                
+                except requests.exceptions.ConnectionError as e:
+                    # Connection refused - site may be blocking
                     continue
-                except Exception:
+                except requests.exceptions.Timeout:
                     continue
+                except Exception as e:
+                    continue
+            
+            if found_count >= 3:
+                break
         
         if not self.vulnerabilities:
             print("[*] No open redirect vulnerabilities detected")
+        else:
+            print(f"[+] Found {len(self.vulnerabilities)} open redirect vulnerabilities")
         
         return self.vulnerabilities
+    
+    def _is_site_reachable(self):
+        """Check if the site is reachable"""
+        try:
+            response = self.session.get(self.base_url, timeout=3)
+            return True
+        except:
+            return False
+    
+    def _safe_url_join(self, base, param, value):
+        """Safely join URL components"""
+        if not base.endswith('?'):
+            base += '?'
+        return f"{base}{param}={urllib.parse.quote(value)}"
